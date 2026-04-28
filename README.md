@@ -27,3 +27,23 @@ LexiAssist is an end-to-end LLM application built to demonstrate production-leve
 | Cloud Deployment | AWS EC2 + nginx |
 
 ## Project Structure
+lexiassist/
+├── backend/          # FastAPI app and RAG pipeline
+├── frontend/         # Streamlit chat UI
+├── data/             # Raw and processed documents
+├── vectorstore/      # ChromaDB storage (local, not committed)
+├── evaluation/       # RAGAs evaluation scripts and datasets
+├── tests/            # pytest test suite
+└── .github/          # GitHub Actions CI/CD workflows
+
+## Setup Instructions
+
+*(Will be completed at end of project)*
+
+## Evaluation Results
+
+*(Will be completed in Phase 7)*
+
+## Live Demo
+
+*(Will be completed in Phase 10)*
