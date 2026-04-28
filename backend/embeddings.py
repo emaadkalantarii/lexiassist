@@ -14,8 +14,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_core.documents import Document
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 load_dotenv()
 
@@ -68,7 +69,6 @@ def chunk_documents(documents: list[Document]) -> list[Document]:
     Splits documents into smaller overlapping chunks for more
     precise embedding and retrieval.
     """
-    from langchain_text_splitters import RecursiveCharacterTextSplitter
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=int(os.getenv("CHUNK_SIZE", 1000)),
