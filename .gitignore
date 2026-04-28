@@ -216,3 +216,29 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Environment variables - NEVER commit this
+.env
+
+# Virtual environment
+lexi-venv/
+
+# ChromaDB vector store data
+vectorstore/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Data files (large, downloaded locally)
+data/raw/
+data/processed/
+
+# VS Code settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
