@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 # FastAPI on port 8000, Streamlit on port 8501.
 import os
 
-API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8999")
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
 
 # ── Page Setup ────────────────────────────────────────────────────────────────
 

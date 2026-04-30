@@ -45,45 +45,45 @@ The project covers the full AI engineering stack: data ingestion, vector embeddi
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        User Interface                        │
-│                    Streamlit Chat App                        │
-│                  (Streamlit Cloud · Private)                 │
+│                        User Interface                       │
+│                    Streamlit Chat App                       │
+│                  (Streamlit Cloud · Private)                │
 └─────────────────────┬───────────────────────────────────────┘
                       │ HTTP POST /chat
                       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                     FastAPI Backend                          │
+│                     FastAPI Backend                         │
 │          Pydantic validation · Conversation memory          │
-│              (Docker Container · Port 8999)                  │
+│              (Docker Container · Port 8999)                 │
 └─────────────────────┬───────────────────────────────────────┘
                       │
                       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   LangChain RAG Chain                        │
-│                                                              │
-│   User Question                                              │
-│        │                                                     │
-│        ▼                                                     │
-│   OpenAI Embeddings (text-embedding-3-small)                 │
-│        │                                                     │
-│        ▼                                                     │
+│                   LangChain RAG Chain                       │
+│                                                             │
+│   User Question                                             │
+│        │                                                    │
+│        ▼                                                    │
+│   OpenAI Embeddings (text-embedding-3-small)                │
+│        │                                                    │
+│        ▼                                                    │
 │   ChromaDB Vector Store ──► Top-5 Relevant Chunks           │
 │   (394 chunks · 145 papers)        │                        │
-│                                    ▼                         │
-│                          Prompt Template                     │
-│                     (System + Context + History)             │
-│                                    │                         │
-│                                    ▼                         │
-│                        GPT-4o-mini Generation                │
-│                                    │                         │
-│                                    ▼                         │
-│                     Answer + Source Citations                │
+│                                    ▼                        │
+│                          Prompt Template                    │
+│                     (System + Context + History)            │
+│                                    │                        │
+│                                    ▼                        │
+│                        GPT-4o-mini Generation               │
+│                                    │                        │
+│                                    ▼                        │
+│                     Answer + Source Citations               │
 └─────────────────────────────────────────────────────────────┘
                       │
                       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   Data Pipeline (Offline)                    │
-│                                                              │
+│                   Data Pipeline (Offline)                   │
+│                                                             │
 │   ArXiv API ──► 145 Papers ──► Chunking (394 chunks)        │
 │   ──► OpenAI Embeddings ──► ChromaDB Persistence            │
 └─────────────────────────────────────────────────────────────┘
@@ -100,11 +100,11 @@ Push to main
      │
      ▼
 ┌──────────────────┐     ┌─────────────────────┐     ┌───────────────────────┐
-│  Code Quality    │────►│    Run Tests         │────►│  Build & Push Docker  │
-│  Check           │     │                      │     │  Image                │
-│                  │     │  · Fixture test data │     │                       │
-│  · flake8 lint   │     │  · Build vectorstore │     │  · docker buildx      │
-│  · black format  │     │  · 6 pytest API tests│     │  · Push to Docker Hub │
+│  Code Quality    │────►│    Run Tests        │────►│  Build & Push Docker  │
+│  Check           │     │                     │     │  Image                │
+│                  │     │ · Fixture test data │     │                       │
+│  · flake8 lint   │     │ · Build vectorstore │     │  · docker buildx      │
+│  · black format  │     │ · 6 pytest API tests│     │  · Push to Docker Hub │
 └──────────────────┘     └─────────────────────┘     └───────────────────────┘
 ```
 
