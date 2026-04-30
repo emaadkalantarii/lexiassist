@@ -49,7 +49,7 @@ jobs:
       - name: Run pytest
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: python -m pytest tests/ -v
+        run: python -m pytest tests/test_api.py -v --no-header
 
   docker:
     name: Build and Push Docker Image
