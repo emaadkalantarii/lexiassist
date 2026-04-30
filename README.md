@@ -425,4 +425,4 @@ MIT License — see [LICENSE](LICENSE) for details.
 **Emad Kalantari**
 Master's in Information and Computer Sciences, University of Luxembourg
 
-[LinkedIn](https://linkedin.com/in/emaadkalantarii) · [GitHub](https://github.com/emaadkalantarii) · [Website](https://emadkalantari.com)
+[LinkedIn](https://www.linkedin.com/in/emad-kalantari/) · [GitHub](https://github.com/emaadkalantarii) · [Website](https://emadkalantari.com)
