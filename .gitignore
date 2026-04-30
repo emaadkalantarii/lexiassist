@@ -232,9 +232,11 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Data files (large, downloaded locally)
+
+# Data files - keep processed documents for cloud deployment
 data/raw/
-data/processed/
+# data/processed/   ← comment this out or remove it
+vectorstore/
 
 # VS Code settings
 .vscode/
