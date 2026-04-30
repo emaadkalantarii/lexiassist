@@ -15,7 +15,7 @@
 
 LexiAssist is an end-to-end LLM application demonstrating production-level AI engineering across the full stack. It ingests AI/ML research papers from ArXiv, stores them in a vector database, and uses Retrieval-Augmented Generation (RAG) to answer natural-language questions with grounded, cited responses.
 
-The project was built to cover every layer of a real AI product: automated data ingestion, semantic embeddings, RAG pipeline with conversational memory, a REST API backend, an interactive chat UI, pipeline quality evaluation, Docker containerization, and GitHub Actions CI/CD.
+The project covers every layer of a real AI product: automated data ingestion, semantic embeddings, RAG pipeline with conversational memory, a REST API backend, an interactive chat UI, pipeline quality evaluation, Docker containerization, and GitHub Actions CI/CD.
 
 **Key project stats:**
 - 145 papers ingested across 15 AI/ML topics
@@ -41,8 +41,8 @@ The project was built to cover every layer of a real AI product: automated data 
 ![Memory Demo](docs/screenshots/memory_demo.png)
 
 > The second question ("How does it compare to fine-tuning?") contains no context on its own.
-> The chatbot answers it correctly only because it retains the previous conversation — demonstrating
-> that the conversation memory pipeline is working.
+> The chatbot answers correctly only because it retains the previous conversation —
+> demonstrating that the conversation memory pipeline is working.
 
 **Session stats and knowledge base info visible in the sidebar:**
 
@@ -113,13 +113,13 @@ Every push to `main` automatically triggers a three-stage pipeline via GitHub Ac
 Push to main
      │
      ▼
-┌─────────────────┐     ┌───────────────────────┐     ┌────────────────────────┐
-│  Code Quality   │────►│     Run Tests         │────►│  Build & Push Docker   │
-│  Check          │     │                       │     │  Image                 │
-│                 │     │  · Fixture test data  │     │                        │
-│  · flake8 lint  │     │  · Build vectorstore  │     │  · docker buildx       │
-│  · black format │     │  · 6 pytest API tests │     │  · Push to Docker Hub  │
-└─────────────────┘     └───────────────────────┘     └────────────────────────┘
+┌─────────────────┐     ┌───────────────────────┐     ┌─────────────────────────┐
+│  Code Quality   │────►│     Run Tests         │────►│  Build & Push Docker    │
+│  Check          │     │                       │     │  Image                  │
+│                 │     │  · Fixture test data  │     │                         │
+│  · flake8 lint  │     │  · Build vectorstore  │     │  · docker buildx        │
+│  · black format │     │  · 6 pytest API tests │     │  · Push to Docker Hub   │
+└─────────────────┘     └───────────────────────┘     └─────────────────────────┘
 ```
 
 The test job uses a small fixture dataset instead of live ArXiv calls — keeping CI fast,
@@ -149,7 +149,7 @@ Docker image: [hub.docker.com/r/emaadkalantarii/lexiassist](https://hub.docker.c
 
 ## Evaluation Results
 
-The RAG pipeline quality was measured using a custom **LLM-as-judge** framework built from scratch — GPT-4o-mini scores each metric independently across 20 hand-curated question/answer pairs. This approach mirrors what production evaluation frameworks like RAGAs do internally.
+The RAG pipeline quality was measured using a custom **LLM-as-judge** framework — GPT-4o-mini scores each metric independently across 20 hand-curated question/answer pairs. This approach mirrors what production evaluation frameworks like RAGAs do internally.
 
 | Metric | Score | Rating | What It Measures |
 |--------|-------|--------|-----------------|
@@ -164,118 +164,144 @@ The RAG pipeline quality was measured using a custom **LLM-as-judge** framework 
 
 ---
 
-## Project Structure
+## Getting Started
+
+You have two options depending on your preference. **Option A (Docker)** is the fastest
+way to get the app running — no Python setup required. **Option B (Local)** is for
+development or if you want to modify the code.
+
+### Prerequisite for Both Options
+
+You need an **OpenAI API key** for both options. Get one at [platform.openai.com](https://platform.openai.com).
+
+---
+
+### Option A — Docker (Recommended)
+
+The fastest way to run LexiAssist. Requires only Docker Desktop and an OpenAI API key.
+No Python installation, no dependency management, no setup scripts.
+
+**Step 1 — Install Docker Desktop**
+
+Download and install from [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop).
+Start Docker Desktop and wait until the engine is running.
+
+**Step 2 — Clone the repository**
+
+```bash
+git clone https://github.com/emaadkalantarii/lexiassist.git
+cd lexiassist
+```
+
+**Step 3 — Configure your API key**
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and set your key:
 
 ```
-lexiassist/
-├── backend/
-│   ├── main.py                  # FastAPI app — /chat, /health, /ingest endpoints
-│   ├── rag_chain.py             # LangChain RAG pipeline with conversation memory
-│   ├── embeddings.py            # ChromaDB vector store management
-│   └── ingest.py                # ArXiv data ingestion (145 papers, 15 topics)
-├── frontend/
-│   └── app.py                   # Streamlit chat UI connected to FastAPI
-├── streamlit_app.py             # Self-contained version (no separate API needed)
-├── build_vectorstore.py         # One-time script to embed and index all documents
-├── evaluation/
-│   ├── evaluate.py              # LLM-as-judge evaluation pipeline
-│   ├── eval_dataset.json        # 20 hand-curated Q&A evaluation pairs
-│   └── eval_results.json        # Full per-sample evaluation results
-├── tests/
-│   ├── test_api.py              # 6 pytest tests for all FastAPI endpoints
-│   └── fixtures/
-│       └── sample_documents.json  # Lightweight fixture data for CI testing
-├── data/
-│   └── processed/
-│       └── documents.json       # 145 structured ArXiv documents
-├── .github/
-│   └── workflows/
-│       └── ci.yml               # GitHub Actions — lint → test → docker push
-├── docs/
-│   └── screenshots/             # App screenshots used in this README
-├── Dockerfile                   # Container image definition
-├── docker-compose.yml           # Multi-service local orchestration
-├── .env.example                 # Environment variable reference
-├── conftest.py                  # pytest path configuration
-└── requirements.txt             # Python dependencies
+OPENAI_API_KEY=sk-proj-your-key-here
+```
+
+**Step 4 — Run the data pipeline (one-time setup)**
+
+Before starting the containers, you need to download the papers and build the
+vector store. This runs inside Docker so no local Python is needed:
+
+```bash
+docker compose run --rm api python backend/ingest.py
+docker compose run --rm api python build_vectorstore.py
+```
+
+This takes about 2–3 minutes. It downloads 145 papers from ArXiv and builds the
+ChromaDB index. You only need to do this once — the data is saved locally.
+
+**Step 5 — Start the application**
+
+```bash
+docker compose up
+```
+
+Both services start automatically:
+
+| Service | URL | Description |
+|---------|-----|-------------|
+| Streamlit UI | http://localhost:8501 | Chat interface |
+| FastAPI backend | http://localhost:8999 | REST API |
+| API docs | http://localhost:8999/docs | Interactive Swagger UI |
+| Health check | http://localhost:8999/health | API status |
+
+To stop:
+```bash
+docker compose down
+```
+
+To run in the background:
+```bash
+docker compose up -d
+```
+
+You can also pull the pre-built image directly from Docker Hub without cloning:
+```bash
+docker pull emaadkalantarii/lexiassist:latest
 ```
 
 ---
 
-## Quick Start
+### Option B — Local Python Setup
 
-### Prerequisites
-- Python 3.11+
-- Docker Desktop (for containerized deployment)
-- OpenAI API key ([get one here](https://platform.openai.com))
+Use this option if you want to explore, modify, or extend the code.
 
-### Local Setup
+**Step 1 — Clone and set up the environment**
 
 ```bash
-# Clone the repository
 git clone https://github.com/emaadkalantarii/lexiassist.git
 cd lexiassist
 
-# Create and activate virtual environment
 python -m venv venv
 venv\Scripts\activate          # Windows
 # source venv/bin/activate      # macOS/Linux
 
-# Install all dependencies
 pip install -r requirements.txt
+```
 
-# Set up environment variables
+**Step 2 — Configure environment variables**
+
+```bash
 cp .env.example .env
-# Open .env and add your OPENAI_API_KEY
+```
 
-# Run the data ingestion pipeline (downloads 145 papers — takes ~2 min)
+Open `.env` and add your OpenAI API key.
+
+**Step 3 — Run the data pipeline (one-time setup)**
+
+```bash
+# Download 145 papers from ArXiv (~2 min)
 python backend/ingest.py
 
-# Build the ChromaDB vector store (embeds all documents — takes ~1 min)
+# Embed and index all documents into ChromaDB (~1 min)
 python build_vectorstore.py
 ```
 
-### Run the Application
+**Step 4 — Start both services**
 
 Open two terminals:
 
 ```bash
-# Terminal 1 — Start the FastAPI backend
+# Terminal 1 — FastAPI backend
 uvicorn backend.main:app --reload --port 8000
 
-# Terminal 2 — Start the Streamlit frontend
+# Terminal 2 — Streamlit frontend
 streamlit run frontend/app.py
 ```
 
-Open in your browser:
-- **Chat UI:** `http://localhost:8501`
-- **API docs (Swagger):** `http://localhost:8000/docs`
-- **Health check:** `http://localhost:8000/health`
-
----
-
-## Docker Deployment
-
-```bash
-# Build and start all services with one command
-docker compose up
-
-# Run in the background
-docker compose up -d
-
-# Stop all services
-docker compose down
-```
-
-Services after startup:
-- FastAPI backend: `http://localhost:8999`
-- Streamlit frontend: `http://localhost:8501`
-
-Or pull the pre-built image from Docker Hub:
-
-```bash
-docker pull emaadkalantarii/lexiassist:latest
-```
+| Service | URL |
+|---------|-----|
+| Streamlit UI | http://localhost:8501 |
+| API docs | http://localhost:8000/docs |
+| Health check | http://localhost:8000/health |
 
 ---
 
@@ -322,12 +348,54 @@ Triggers the full ArXiv ingestion and vectorstore rebuild pipeline programmatica
 ## Running Tests
 
 ```bash
+# Option A — inside Docker
+docker compose run --rm api python -m pytest tests/ -v
+
+# Option B — local Python
 python -m pytest tests/ -v
 ```
 
-The test suite covers: health check endpoint, basic chat with a question, multi-turn
-conversation history, empty input rejection (422), missing field rejection (422),
-and source citation field validation.
+The test suite covers: health check endpoint, basic chat, multi-turn conversation
+history, empty input rejection (422), missing field rejection (422), and source
+citation field validation — 6 tests total.
+
+---
+
+## Project Structure
+
+```
+lexiassist/
+├── backend/
+│   ├── main.py                  # FastAPI app — /chat, /health, /ingest endpoints
+│   ├── rag_chain.py             # LangChain RAG pipeline with conversation memory
+│   ├── embeddings.py            # ChromaDB vector store management
+│   └── ingest.py                # ArXiv data ingestion (145 papers, 15 topics)
+├── frontend/
+│   └── app.py                   # Streamlit chat UI connected to FastAPI
+├── streamlit_app.py             # Self-contained version (no separate API needed)
+├── build_vectorstore.py         # One-time script to embed and index all documents
+├── evaluation/
+│   ├── evaluate.py              # LLM-as-judge evaluation pipeline
+│   ├── eval_dataset.json        # 20 hand-curated Q&A evaluation pairs
+│   └── eval_results.json        # Full per-sample evaluation results
+├── tests/
+│   ├── test_api.py              # 6 pytest tests for all FastAPI endpoints
+│   └── fixtures/
+│       └── sample_documents.json  # Lightweight fixture data for CI testing
+├── data/
+│   └── processed/
+│       └── documents.json       # 145 structured ArXiv documents
+├── .github/
+│   └── workflows/
+│       └── ci.yml               # GitHub Actions — lint → test → docker push
+├── docs/
+│   └── screenshots/             # App screenshots used in this README
+├── Dockerfile                   # Container image definition
+├── docker-compose.yml           # Multi-service local orchestration
+├── .env.example                 # Environment variable reference
+├── conftest.py                  # pytest path configuration
+└── requirements.txt             # Python dependencies
+```
 
 ---
 
