@@ -43,7 +43,14 @@ lexiassist/
 
 ## Evaluation Results
 
-*(Will be completed in Phase 7)*
+Evaluated using [RAGAs](https://github.com/explodinggradients/ragas) on a hand-curated dataset of 20 questions.
+
+| Metric | Score | Interpretation |
+|--------|-------|----------------|
+| Faithfulness | 0.70 | Answers stay grounded in retrieved documents |
+| Answer Relevancy | 0.96 | Answers directly address the question asked |
+| Context Precision | 0.56 | Retrieved chunks are relevant to the query |
+| Context Recall | 0.53 | Retrieved chunks cover the needed information |
 
 ## Live Demo
 
