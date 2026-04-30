@@ -37,8 +37,7 @@ def get_embedding_model() -> OpenAIEmbeddings:
     the standard choice for RAG applications.
     """
     return OpenAIEmbeddings(
-        model="text-embedding-3-small",
-        openai_api_key=os.getenv("OPENAI_API_KEY")
+        model="text-embedding-3-small", openai_api_key=os.getenv("OPENAI_API_KEY")
     )
 
 
@@ -55,8 +54,7 @@ def load_documents() -> list[Document]:
         # LangChain's Document class wraps text content and metadata
         # into a single object that the rest of the pipeline expects
         langchain_doc = Document(
-            page_content=doc["page_content"],
-            metadata=doc["metadata"]
+            page_content=doc["page_content"], metadata=doc["metadata"]
         )
         documents.append(langchain_doc)
 
@@ -75,7 +73,7 @@ def chunk_documents(documents: list[Document]) -> list[Document]:
         chunk_overlap=int(os.getenv("CHUNK_OVERLAP", 200)),
         # Tells the splitter to try breaking at paragraphs first,
         # then sentences, then words, then characters — in that order
-        separators=["\n\n", "\n", ". ", " ", ""]
+        separators=["\n\n", "\n", ". ", " ", ""],
     )
 
     chunks = splitter.split_documents(documents)
@@ -99,7 +97,7 @@ def build_vector_store(chunks: list[Document]) -> Chroma:
     vector_store = Chroma.from_documents(
         documents=chunks,
         embedding=embedding_model,
-        persist_directory=CHROMA_PERSIST_DIR
+        persist_directory=CHROMA_PERSIST_DIR,
     )
 
     logger.info(f"✅ Vector store built with {len(chunks)} chunks")
@@ -115,8 +113,7 @@ def load_vector_store() -> Chroma:
     embedding_model = get_embedding_model()
 
     vector_store = Chroma(
-        persist_directory=CHROMA_PERSIST_DIR,
-        embedding_function=embedding_model
+        persist_directory=CHROMA_PERSIST_DIR, embedding_function=embedding_model
     )
 
     return vector_store
@@ -134,8 +131,7 @@ def get_retriever():
     # retriever interface. search_kwargs={"k": TOP_K_RESULTS}
     # means "return the top 5 most similar chunks per query"
     retriever = vector_store.as_retriever(
-        search_type="similarity",
-        search_kwargs={"k": TOP_K_RESULTS}
+        search_type="similarity", search_kwargs={"k": TOP_K_RESULTS}
     )
 
     return retriever

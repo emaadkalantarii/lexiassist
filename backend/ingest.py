@@ -18,8 +18,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
+    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -54,9 +53,7 @@ def fetch_papers_for_topic(topic: str, max_results: int) -> list[dict]:
     logger.info(f"Fetching papers for topic: '{topic}'")
 
     search = arxiv.Search(
-        query=topic,
-        max_results=max_results,
-        sort_by=arxiv.SortCriterion.Relevance
+        query=topic, max_results=max_results, sort_by=arxiv.SortCriterion.Relevance
     )
 
     papers = []
@@ -113,7 +110,7 @@ def save_raw_papers(papers: list[dict]) -> None:
             "topics_searched": SEARCH_TOPICS,
             "papers_per_topic": PAPERS_PER_TOPIC,
         },
-        "papers": papers
+        "papers": papers,
     }
 
     with open(RAW_DATA_PATH, "w", encoding="utf-8") as f:
@@ -143,10 +140,7 @@ def create_documents(papers: list[dict]) -> list[dict]:
             "url": paper["url"],
         }
 
-        documents.append({
-            "page_content": page_content,
-            "metadata": metadata
-        })
+        documents.append({"page_content": page_content, "metadata": metadata})
 
     return documents
 
@@ -160,7 +154,7 @@ def save_processed_documents(documents: list[dict]) -> None:
             "created_at": datetime.now().isoformat(),
             "total_documents": len(documents),
         },
-        "documents": documents
+        "documents": documents,
     }
 
     with open(PROCESSED_DATA_PATH, "w", encoding="utf-8") as f:

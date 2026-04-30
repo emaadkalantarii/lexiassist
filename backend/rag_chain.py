@@ -55,9 +55,7 @@ def format_documents(docs: list[Document]) -> str:
         authors = doc.metadata.get("authors", "Unknown")
         content = doc.page_content
 
-        formatted.append(
-            f"[Source {i+1}] {title} by {authors}\n{content}"
-        )
+        formatted.append(f"[Source {i+1}] {title} by {authors}\n{content}")
 
     return "\n\n---\n\n".join(formatted)
 
@@ -86,7 +84,7 @@ def get_llm() -> ChatOpenAI:
         model=os.getenv("LLM_MODEL", "gpt-4o-mini"),
         temperature=0.2,
         openai_api_key=os.getenv("OPENAI_API_KEY"),
-        streaming=True
+        streaming=True,
     )
 
 
@@ -101,11 +99,13 @@ def build_rag_chain():
     retriever = get_retriever()
     llm = get_llm()
 
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", SYSTEM_PROMPT),
-        MessagesPlaceholder(variable_name="chat_history"),
-        ("human", "{question}"),
-    ])
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", SYSTEM_PROMPT),
+            MessagesPlaceholder(variable_name="chat_history"),
+            ("human", "{question}"),
+        ]
+    )
 
     # StrOutputParser extracts the plain text string from the LLM's
     # response object, so callers receive a clean string answer
@@ -151,11 +151,13 @@ def ask(question: str, chat_history: list[dict] = None) -> dict:
     formatted_history = format_chat_history(chat_history)
 
     # Run the chain — this calls the LLM and returns the answer string
-    answer = _chain.invoke({
-        "context": context,
-        "chat_history": formatted_history,
-        "question": question,
-    })
+    answer = _chain.invoke(
+        {
+            "context": context,
+            "chat_history": formatted_history,
+            "question": question,
+        }
+    )
 
     # Build a deduplicated list of source papers for citation display
     seen_titles = set()
@@ -164,12 +166,14 @@ def ask(question: str, chat_history: list[dict] = None) -> dict:
         title = doc.metadata.get("title", "Unknown")
         if title not in seen_titles:
             seen_titles.add(title)
-            sources.append({
-                "title": title,
-                "authors": doc.metadata.get("authors", ""),
-                "published": doc.metadata.get("published", ""),
-                "url": doc.metadata.get("url", ""),
-            })
+            sources.append(
+                {
+                    "title": title,
+                    "authors": doc.metadata.get("authors", ""),
+                    "published": doc.metadata.get("published", ""),
+                    "url": doc.metadata.get("url", ""),
+                }
+            )
 
     logger.info(f"Question answered using {len(sources)} unique sources")
 

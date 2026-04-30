@@ -21,8 +21,7 @@ from openai import OpenAI
 load_dotenv()
 
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
+    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -66,12 +65,14 @@ def run_rag_on_samples(samples: list[dict]) -> list[dict]:
         docs = retriever.invoke(question)
         contexts = [doc.page_content for doc in docs]
 
-        results.append({
-            "question": question,
-            "answer": answer,
-            "contexts": contexts,
-            "ground_truth": ground_truth,
-        })
+        results.append(
+            {
+                "question": question,
+                "answer": answer,
+                "contexts": contexts,
+                "ground_truth": ground_truth,
+            }
+        )
 
     return results
 
@@ -100,7 +101,7 @@ Respond with ONLY a single integer from 0 to 10."""
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
         temperature=0,
-        max_tokens=5
+        max_tokens=5,
     )
     try:
         score = int(response.choices[0].message.content.strip())
@@ -129,7 +130,7 @@ Respond with ONLY a single integer from 0 to 10."""
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
         temperature=0,
-        max_tokens=5
+        max_tokens=5,
     )
     try:
         score = int(response.choices[0].message.content.strip())
@@ -154,7 +155,7 @@ Respond with ONLY 'yes' or 'no'."""
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
             temperature=0,
-            max_tokens=5
+            max_tokens=5,
         )
         answer = response.choices[0].message.content.strip().lower()
         if "yes" in answer:
@@ -185,7 +186,7 @@ Respond with ONLY a single integer from 0 to 10."""
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
         temperature=0,
-        max_tokens=5
+        max_tokens=5,
     )
     try:
         score = int(response.choices[0].message.content.strip())
@@ -220,17 +221,19 @@ def run_evaluation(results: list[dict]) -> tuple[dict, list[dict]]:
         precision_scores.append(p)
         recall_scores.append(rc)
 
-        detailed.append({
-            "question": r["question"],
-            "answer": r["answer"],
-            "ground_truth": r["ground_truth"],
-            "scores": {
-                "faithfulness": f,
-                "answer_relevancy": a,
-                "context_precision": p,
-                "context_recall": rc,
+        detailed.append(
+            {
+                "question": r["question"],
+                "answer": r["answer"],
+                "ground_truth": r["ground_truth"],
+                "scores": {
+                    "faithfulness": f,
+                    "answer_relevancy": a,
+                    "context_precision": p,
+                    "context_recall": rc,
+                },
             }
-        })
+        )
 
     aggregate = {
         "faithfulness": round(sum(faithfulness_scores) / len(faithfulness_scores), 4),
@@ -250,7 +253,7 @@ def save_results(samples: list[dict], scores: dict, detailed: list[dict]) -> Non
             "total_samples": len(samples),
             "model": os.getenv("LLM_MODEL", "gpt-4o-mini"),
             "embedding_model": os.getenv("EMBEDDING_MODEL", "text-embedding-3-small"),
-            "evaluation_method": "custom LLM-as-judge metrics"
+            "evaluation_method": "custom LLM-as-judge metrics",
         },
         "scores": scores,
         "detailed_results": detailed,

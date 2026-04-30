@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 # When running locally both services run simultaneously —
 # FastAPI on port 8000, Streamlit on port 8501.
 import os
+
 API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8999")
 
 # ── Page Setup ────────────────────────────────────────────────────────────────
@@ -28,12 +29,13 @@ st.set_page_config(
     page_title="LexiAssist",
     page_icon="🤖",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
 
 # ── Custom Styling ────────────────────────────────────────────────────────────
 
-st.markdown("""
+st.markdown(
+    """
     <style>
     .source-card {
         background-color: #1e1e2e;
@@ -56,9 +58,12 @@ st.markdown("""
         padding: 1rem 0;
     }
     </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # ── Helper Functions ──────────────────────────────────────────────────────────
+
 
 def check_api_health() -> bool:
     """
@@ -79,15 +84,8 @@ def send_chat_request(question: str, chat_history: list) -> dict | None:
     Returns None if the request fails.
     """
     try:
-        payload = {
-            "question": question,
-            "chat_history": chat_history
-        }
-        response = requests.post(
-            f"{API_BASE_URL}/chat",
-            json=payload,
-            timeout=60
-        )
+        payload = {"question": question, "chat_history": chat_history}
+        response = requests.post(f"{API_BASE_URL}/chat", json=payload, timeout=60)
         response.raise_for_status()
         return response.json()
 
@@ -109,7 +107,8 @@ def render_source_card(source: dict) -> None:
     authors = source.get("authors", "")
     published = source.get("published", "")
 
-    st.markdown(f"""
+    st.markdown(
+        f"""
         <div class="source-card">
             <div class="source-title">
                 <a href="{url}" target="_blank" style="color:#89b4fa; text-decoration:none;">
@@ -118,7 +117,9 @@ def render_source_card(source: dict) -> None:
             </div>
             <div class="source-meta">{authors} · {published}</div>
         </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 # ── Session State Initialization ──────────────────────────────────────────────
@@ -145,13 +146,17 @@ with st.sidebar:
         st.success("Backend connected", icon="✅")
     else:
         st.error("Backend offline", icon="🔴")
-        st.info("Start the backend with:\n```\nuvicorn backend.main:app --port 8000\n```")
+        st.info(
+            "Start the backend with:\n```\nuvicorn backend.main:app --port 8000\n```"
+        )
 
     st.divider()
 
     # Knowledge base info
     st.markdown("### Knowledge Base")
-    st.info("📚 150+ AI/ML research papers covering RAG, transformers, fine-tuning, agents, RLHF, and more.")
+    st.info(
+        "📚 150+ AI/ML research papers covering RAG, transformers, fine-tuning, agents, RLHF, and more."
+    )
 
     st.divider()
 
@@ -172,7 +177,7 @@ with st.sidebar:
         "<div style='text-align:center; color:#a6adc8; font-size:0.8em;'>"
         "Built with LangChain · ChromaDB<br>FastAPI · Streamlit · OpenAI"
         "</div>",
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
 # ── Main Chat Interface ───────────────────────────────────────────────────────
@@ -180,7 +185,7 @@ with st.sidebar:
 st.markdown(
     "<div class='main-header'><h1>🤖 LexiAssist</h1>"
     "<p style='color:#a6adc8'>Ask me anything about AI and ML research</p></div>",
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 # Display conversation history
@@ -190,7 +195,9 @@ for message in st.session_state.messages:
 
         # Show sources if this was an assistant message with sources
         if message["role"] == "assistant" and message.get("sources"):
-            with st.expander(f"📚 Sources ({len(message['sources'])} papers)", expanded=False):
+            with st.expander(
+                f"📚 Sources ({len(message['sources'])} papers)", expanded=False
+            ):
                 for source in message["sources"]:
                     render_source_card(source)
 
@@ -225,7 +232,9 @@ if prompt := st.chat_input("Ask a question about AI/ML research..."):
             st.markdown(answer)
 
             # Show processing time as a subtle caption
-            st.caption(f"⚡ Answered in {processing_time}ms using {len(sources)} sources")
+            st.caption(
+                f"⚡ Answered in {processing_time}ms using {len(sources)} sources"
+            )
 
             # Expandable sources section
             if sources:
@@ -234,19 +243,15 @@ if prompt := st.chat_input("Ask a question about AI/ML research..."):
                         render_source_card(source)
 
             # Save assistant message to session state
-            st.session_state.messages.append({
-                "role": "assistant",
-                "content": answer,
-                "sources": sources
-            })
+            st.session_state.messages.append(
+                {"role": "assistant", "content": answer, "sources": sources}
+            )
 
             st.session_state.total_queries += 1
 
         else:
             error_msg = "I encountered an error. Please try again."
             st.error(error_msg)
-            st.session_state.messages.append({
-                "role": "assistant",
-                "content": error_msg,
-                "sources": []
-            })
+            st.session_state.messages.append(
+                {"role": "assistant", "content": error_msg, "sources": []}
+            )

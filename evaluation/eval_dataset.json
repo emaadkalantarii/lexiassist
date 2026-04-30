@@ -1,0 +1,89 @@
+{
+  "metadata": {
+    "description": "Hand-curated evaluation dataset for LexiAssist RAG pipeline",
+    "version": "1.0",
+    "total_samples": 20
+  },
+  "samples": [
+    {
+      "question": "What is retrieval augmented generation?",
+      "ground_truth": "Retrieval Augmented Generation (RAG) is a technique that combines a retrieval system with a generative language model. The retrieval system fetches relevant documents from a knowledge base, and the generative model uses those documents as context to produce accurate, grounded answers."
+    },
+    {
+      "question": "What is the difference between RAG and fine-tuning?",
+      "ground_truth": "RAG retrieves external knowledge at inference time without modifying model weights, making it easy to update the knowledge base. Fine-tuning trains the model on new data and updates its parameters, which is more expensive and requires retraining when knowledge changes."
+    },
+    {
+      "question": "What is the attention mechanism in transformers?",
+      "ground_truth": "The attention mechanism allows transformers to weigh the importance of different tokens in a sequence when producing a representation. Self-attention computes relationships between all pairs of tokens, enabling the model to capture long-range dependencies."
+    },
+    {
+      "question": "What is chain of thought prompting?",
+      "ground_truth": "Chain of thought prompting encourages language models to produce intermediate reasoning steps before giving a final answer. This technique significantly improves performance on complex reasoning tasks by making the model's thinking process explicit."
+    },
+    {
+      "question": "What is reinforcement learning from human feedback?",
+      "ground_truth": "Reinforcement learning from human feedback (RLHF) is a training technique where a language model is fine-tuned using feedback from human raters. A reward model is trained on human preferences and used to guide the language model toward producing more helpful and aligned outputs."
+    },
+    {
+      "question": "What is LoRA in the context of fine-tuning?",
+      "ground_truth": "LoRA (Low-Rank Adaptation) is a parameter-efficient fine-tuning method that inserts trainable low-rank matrices into transformer layers. Instead of updating all model weights, only the small adapter matrices are trained, dramatically reducing memory and compute requirements."
+    },
+    {
+      "question": "What is a vector database?",
+      "ground_truth": "A vector database stores high-dimensional embedding vectors and supports efficient similarity search. It enables semantic retrieval by finding vectors that are mathematically close to a query vector, which corresponds to finding semantically similar content."
+    },
+    {
+      "question": "What is hallucination in language models?",
+      "ground_truth": "Hallucination refers to language models generating content that is factually incorrect, fabricated, or not grounded in the provided context. It is a major reliability concern for LLM deployments, especially in high-stakes applications."
+    },
+    {
+      "question": "What are LLM agents?",
+      "ground_truth": "LLM agents are systems where a language model acts as a reasoning engine that can use tools, execute actions, and make decisions over multiple steps to complete complex tasks. They combine language model capabilities with external tool use and memory."
+    },
+    {
+      "question": "What is semantic search?",
+      "ground_truth": "Semantic search retrieves documents based on meaning and intent rather than exact keyword matching. It uses embedding vectors to represent queries and documents in a shared semantic space, enabling retrieval of conceptually related content."
+    },
+    {
+      "question": "What is instruction tuning for language models?",
+      "ground_truth": "Instruction tuning is a fine-tuning approach where language models are trained on datasets of instruction-response pairs. This helps models better follow natural language instructions and generalize to new tasks described in plain language."
+    },
+    {
+      "question": "What are efficient transformer architectures?",
+      "ground_truth": "Efficient transformer architectures reduce the quadratic complexity of standard attention mechanisms. Techniques include sparse attention, linear attention, and sliding window attention, enabling transformers to handle longer sequences with less memory and computation."
+    },
+    {
+      "question": "How are knowledge graphs used with language models?",
+      "ground_truth": "Knowledge graphs provide structured factual information that can be integrated with language models to improve factual accuracy. They can be used to ground model outputs, augment context during retrieval, or guide reasoning over structured relationships."
+    },
+    {
+      "question": "What are multimodal language models?",
+      "ground_truth": "Multimodal language models process and generate content across multiple modalities such as text, images, and audio. They extend traditional language models by incorporating visual or audio encoders and aligning representations across modalities."
+    },
+    {
+      "question": "What benchmarks are used to evaluate LLMs?",
+      "ground_truth": "Common LLM evaluation benchmarks include MMLU for knowledge and reasoning, HumanEval for code generation, TruthfulQA for factual accuracy, and HellaSwag for commonsense reasoning. These benchmarks provide standardized comparisons across models."
+    },
+    {
+      "question": "What is prompt engineering?",
+      "ground_truth": "Prompt engineering is the practice of designing and optimizing input prompts to elicit better responses from language models. Techniques include few-shot examples, role assignment, chain of thought instructions, and output format specification."
+    },
+    {
+      "question": "What is the transformer architecture?",
+      "ground_truth": "The transformer architecture is a neural network design based entirely on attention mechanisms, introduced in the paper Attention Is All You Need. It consists of encoder and decoder blocks with multi-head self-attention and feed-forward layers, and has become the foundation of modern large language models."
+    },
+    {
+      "question": "What is parameter efficient fine-tuning?",
+      "ground_truth": "Parameter efficient fine-tuning methods adapt pre-trained models to new tasks by training only a small subset of parameters. Methods like LoRA, prefix tuning, and adapter layers achieve performance comparable to full fine-tuning at a fraction of the computational cost."
+    },
+    {
+      "question": "How do LLMs handle long context windows?",
+      "ground_truth": "Handling long contexts in LLMs requires architectural modifications such as rotary position embeddings, sliding window attention, or sparse attention patterns. These techniques allow models to process thousands of tokens while keeping memory requirements manageable."
+    },
+    {
+      "question": "What is the role of embeddings in NLP?",
+      "ground_truth": "Embeddings are dense vector representations of text that capture semantic meaning. In NLP, embeddings allow models to represent words, sentences, or documents as numerical vectors, enabling mathematical operations on meaning and powering downstream tasks like retrieval, classification, and clustering."
+    }
+  ]
+}
