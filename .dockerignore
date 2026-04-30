@@ -1,0 +1,22 @@
+# Python
+lexi-venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Environment
+.env
+
+# Git
+.git/
+.gitignore
+
+# Data files — mounted as volumes at runtime instead
+data/
+vectorstore/
+
+# Development files
+.pytest_cache/
+.vscode/
+*.md

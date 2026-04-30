@@ -19,7 +19,8 @@ logger = logging.getLogger(__name__)
 # The URL of your FastAPI backend.
 # When running locally both services run simultaneously —
 # FastAPI on port 8000, Streamlit on port 8501.
-API_BASE_URL = "http://localhost:8000"
+import os
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8999")
 
 # ── Page Setup ────────────────────────────────────────────────────────────────
 

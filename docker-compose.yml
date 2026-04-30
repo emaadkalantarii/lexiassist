@@ -1,0 +1,28 @@
+services:
+
+  api:
+    build: .
+    container_name: lexiassist-api
+    ports:
+      - "8999:8000"
+    volumes:
+      - ./data:/app/data
+      - ./vectorstore:/app/vectorstore
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  frontend:
+    build: .
+    container_name: lexiassist-frontend
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./vectorstore:/app/vectorstore
+    env_file:
+      - .env
+    command: streamlit run frontend/app.py --server.port 8501 --server.address 0.0.0.0
+    depends_on:
+      - api
+    restart: unless-stopped
