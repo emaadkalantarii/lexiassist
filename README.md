@@ -3,11 +3,34 @@
 > A production-ready RAG chatbot answering questions over 150+ AI/ML research papers — with source citations, LLM-as-judge evaluation, CI/CD automation, and full containerized deployment.
 
 [![CI/CD Pipeline](https://github.com/emaadkalantarii/lexiassist/actions/workflows/ci.yml/badge.svg)](https://github.com/emaadkalantarii/lexiassist/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)
-![LangChain](https://img.shields.io/badge/LangChain-latest-1C3C3C)
-![FastAPI](https://img.shields.io/badge/FastAPI-latest-009688?logo=fastapi)
-![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
-![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?logo=openai&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-latest-1C3C3C?style=flat)
+![FastAPI](https://img.shields.io/badge/FastAPI-latest-009688?style=flat&logo=fastapi)
+![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat&logo=docker&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?style=flat&logo=openai&logoColor=white)
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Demo](#demo)
+- [Architecture](#architecture)
+- [CI/CD Pipeline](#cicd-pipeline)
+- [Tech Stack](#tech-stack)
+- [Evaluation Results](#evaluation-results)
+- [Pipeline Walkthrough](#pipeline-walkthrough)
+- [Getting Started](#getting-started)
+  - [Option A — Docker (Recommended)](#option-a--docker-recommended)
+  - [Option B — Local Python Setup](#option-b--local-python-setup)
+- [API Reference](#api-reference)
+- [Running Tests](#running-tests)
+- [Project Structure](#project-structure)
+- [Environment Variables](#environment-variables)
+- [Skills Demonstrated](#skills-demonstrated)
+- [Future Improvements](#future-improvements)
+- [License](#license)
+- [Author](#author)
 
 ---
 
@@ -41,8 +64,8 @@ The project covers every layer of a real AI product: automated data ingestion, s
 ![Memory Demo](docs/screenshots/memory_demo.png)
 
 > The second question ("How does it compare to fine-tuning?") contains no context on its own.
-> The chatbot answers correctly only because it retains the previous conversation —
-> demonstrating that the conversation memory pipeline is working.
+> The chatbot answers correctly only because it retains the previous conversation — demonstrating
+> that the conversation memory pipeline is working.
 
 **Session stats and knowledge base info visible in the sidebar:**
 
@@ -58,46 +81,46 @@ The project covers every layer of a real AI product: automated data ingestion, s
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                       User Interface                        │
-│                   Streamlit Chat App                        │
-│                    (localhost:8501)                         │
+│                       User Interface                         │
+│                   Streamlit Chat App                         │
+│                    (localhost:8501)                          │
 └─────────────────────┬───────────────────────────────────────┘
                       │  HTTP POST /chat
                       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    FastAPI Backend                          │
+│                    FastAPI Backend                           │
 │        Pydantic validation · Conversation memory            │
-│          Logging · Error handling · /docs UI                │
-│                    (localhost:8000)                         │
+│          Logging · Error handling · /docs UI                 │
+│                    (localhost:8000)                          │
 └─────────────────────┬───────────────────────────────────────┘
                       │
                       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                  LangChain RAG Chain                        │
-│                                                             │
-│  User Question                                              │
-│       │                                                     │
-│       ▼                                                     │
-│  OpenAI Embeddings (text-embedding-3-small)                 │
-│       │                                                     │
-│       ▼                                                     │
+│                  LangChain RAG Chain                         │
+│                                                              │
+│  User Question                                               │
+│       │                                                      │
+│       ▼                                                      │
+│  OpenAI Embeddings (text-embedding-3-small)                  │
+│       │                                                      │
+│       ▼                                                      │
 │  ChromaDB Vector Store ──► Top-5 Relevant Chunks            │
 │  (394 chunks · 145 papers)        │                         │
-│                                   ▼                         │
-│                    Prompt Template                          │
-│              (System + Context + Chat History)              │
-│                                   │                         │
-│                                   ▼                         │
-│                      GPT-4o-mini Generation                 │
-│                                   │                         │
-│                                   ▼                         │
-│                   Answer + Source Citations                 │
+│                                   ▼                          │
+│                    Prompt Template                           │
+│              (System + Context + Chat History)               │
+│                                   │                          │
+│                                   ▼                          │
+│                      GPT-4o-mini Generation                  │
+│                                   │                          │
+│                                   ▼                          │
+│                   Answer + Source Citations                  │
 └─────────────────────────────────────────────────────────────┘
                       │
                       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                 Offline Data Pipeline                       │
-│                                                             │
+│                 Offline Data Pipeline                        │
+│                                                              │
 │  ArXiv API ──► 145 Papers ──► Text Chunking (394 chunks)    │
 │       ──► OpenAI Embeddings ──► ChromaDB Persistence        │
 └─────────────────────────────────────────────────────────────┘
@@ -114,16 +137,17 @@ Push to main
      │
      ▼
 ┌─────────────────┐     ┌───────────────────────┐     ┌─────────────────────────┐
-│  Code Quality   │────►│     Run Tests         │────►│  Build & Push Docker    │
-│  Check          │     │                       │     │  Image                  │
-│                 │     │  · Fixture test data  │     │                         │
-│  · flake8 lint  │     │  · Build vectorstore  │     │  · docker buildx        │
-│  · black format │     │  · 6 pytest API tests │     │  · Push to Docker Hub   │
+│  Code Quality   │────►│     Run Tests          │────►│  Build & Push Docker    │
+│  Check          │     │                        │     │  Image                  │
+│                 │     │  · Fixture test data   │     │                         │
+│  · flake8 lint  │     │  · Build vectorstore   │     │  · docker buildx        │
+│  · black format │     │  · 6 pytest API tests  │     │  · Push to Docker Hub   │
 └─────────────────┘     └───────────────────────┘     └─────────────────────────┘
 ```
 
 The test job uses a small fixture dataset instead of live ArXiv calls — keeping CI fast,
-free, and independent of external APIs.
+free, and independent of external APIs. This is an intentional engineering decision:
+tests should never depend on external services.
 
 Docker image: [hub.docker.com/r/emaadkalantarii/lexiassist](https://hub.docker.com/r/emaadkalantarii/lexiassist)
 
@@ -164,6 +188,30 @@ The RAG pipeline quality was measured using a custom **LLM-as-judge** framework 
 
 ---
 
+## Pipeline Walkthrough
+
+### Phase 1 — Data Ingestion (`backend/ingest.py`)
+
+Queries the ArXiv API across 15 AI/ML topic areas (RAG, transformers, fine-tuning, LoRA, agents, RLHF, and more), fetching 10 papers per topic. Results are deduplicated by ArXiv ID to prevent the same paper appearing twice. Metadata — title, abstract, authors, publication date, categories, URL — is structured into a LangChain-compatible document format. Raw paper data is saved to `data/raw/papers.json` and the processed documents to `data/processed/documents.json`.
+
+### Phase 2 — Chunking & Embedding (`backend/embeddings.py`)
+
+Loads the 145 processed documents and splits them using LangChain's `RecursiveCharacterTextSplitter` with 1,000-character chunks and 200-character overlap. The splitter tries paragraph boundaries first, then sentence boundaries, then word boundaries — preserving semantic coherence. Each chunk is embedded using OpenAI's `text-embedding-3-small` model, producing a 1,536-dimensional vector. All 394 vectors are stored in ChromaDB with their source metadata and persisted to disk.
+
+### Phase 3 — RAG Chain (`backend/rag_chain.py`)
+
+When a question is received, it is embedded using the same model and ChromaDB returns the 5 most semantically similar chunks. These chunks are formatted into a context block and injected into a prompt template alongside the conversation history (as LangChain `HumanMessage` / `AIMessage` objects) and a system prompt that instructs the LLM to stay grounded, cite sources, and refuse to fabricate. GPT-4o-mini generates the answer. Source metadata is extracted from the retrieved chunks, deduplicated by title, and returned alongside the answer.
+
+### Phase 4 — FastAPI Backend (`backend/main.py`)
+
+The RAG chain is wrapped in a FastAPI application with three endpoints. The `POST /chat` endpoint accepts a question and optional chat history, validates the request body against Pydantic models, calls the RAG chain, records processing time, and returns the answer with sources. The `GET /health` endpoint returns the server status and version. The `POST /ingest` endpoint triggers the full ingestion and vectorstore rebuild pipeline programmatically. The chain is preloaded at startup via the lifespan handler to avoid first-request latency.
+
+### Phase 5 — Evaluation (`evaluation/evaluate.py`)
+
+A custom LLM-as-judge evaluation framework runs GPT-4o-mini as the evaluator across four metrics. Faithfulness prompts the LLM to rate how well the answer is grounded in the retrieved context. Answer relevancy rates how directly the answer addresses the question. Context precision asks yes/no whether each retrieved chunk is relevant to the query and averages the results. Context recall rates how well the context covers the information needed to produce the ground truth answer. All scores are saved to `eval_results.json` with per-sample breakdowns.
+
+---
+
 ## Getting Started
 
 You have two options depending on your preference. **Option A (Docker)** is the fastest
@@ -172,7 +220,7 @@ development or if you want to modify the code.
 
 ### Prerequisite for Both Options
 
-You need an **OpenAI API key** for both options. Get one at [platform.openai.com](https://platform.openai.com).
+You need an **OpenAI API key**. Get one at [platform.openai.com](https://platform.openai.com).
 
 ---
 
@@ -207,16 +255,15 @@ OPENAI_API_KEY=sk-proj-your-key-here
 
 **Step 4 — Run the data pipeline (one-time setup)**
 
-Before starting the containers, you need to download the papers and build the
-vector store. This runs inside Docker so no local Python is needed:
+Before starting the containers, download the papers and build the vector store.
+This runs inside Docker so no local Python is needed:
 
 ```bash
 docker compose run --rm api python backend/ingest.py
 docker compose run --rm api python build_vectorstore.py
 ```
 
-This takes about 2–3 minutes. It downloads 145 papers from ArXiv and builds the
-ChromaDB index. You only need to do this once — the data is saved locally.
+This takes about 2–3 minutes and only needs to be done once — the data is saved locally.
 
 **Step 5 — Start the application**
 
@@ -233,17 +280,16 @@ Both services start automatically:
 | API docs | http://localhost:8999/docs | Interactive Swagger UI |
 | Health check | http://localhost:8999/health | API status |
 
-To stop:
 ```bash
+# Stop all services
 docker compose down
-```
 
-To run in the background:
-```bash
+# Run in the background
 docker compose up -d
 ```
 
-You can also pull the pre-built image directly from Docker Hub without cloning:
+Or pull the pre-built image from Docker Hub without cloning:
+
 ```bash
 docker pull emaadkalantarii/lexiassist:latest
 ```
@@ -308,6 +354,7 @@ streamlit run frontend/app.py
 ## API Reference
 
 ### `POST /chat`
+
 Send a question and receive a grounded answer with source citations.
 
 **Request body:**
@@ -338,9 +385,11 @@ Send a question and receive a grounded answer with source citations.
 ```
 
 ### `GET /health`
+
 Returns API health status, version, and environment.
 
 ### `POST /ingest`
+
 Triggers the full ArXiv ingestion and vectorstore rebuild pipeline programmatically.
 
 ---
@@ -355,9 +404,9 @@ docker compose run --rm api python -m pytest tests/ -v
 python -m pytest tests/ -v
 ```
 
-The test suite covers: health check endpoint, basic chat, multi-turn conversation
-history, empty input rejection (422), missing field rejection (422), and source
-citation field validation — 6 tests total.
+The test suite covers: health check endpoint, basic chat with a question, multi-turn
+conversation history, empty input rejection (422), missing field rejection (422),
+and source citation field validation — 6 tests total.
 
 ---
 
@@ -414,6 +463,57 @@ lexiassist/
 
 ---
 
+## Skills Demonstrated
+
+**LLM Engineering & RAG:**
+- Retrieval-Augmented Generation pipeline design and implementation end-to-end
+- Semantic chunking strategy (chunk size, overlap, separator hierarchy)
+- Vector embedding generation and ChromaDB persistence
+- Prompt engineering for hallucination mitigation and structured citation output
+- Multi-turn conversational memory using LangChain message history
+- LLM orchestration with LangChain chains and output parsers
+
+**Evaluation & Quality:**
+- Custom LLM-as-judge evaluation framework built from scratch
+- Four RAG-specific metrics: faithfulness, answer relevancy, context precision, context recall
+- Hand-curated ground truth dataset of 20 question/answer pairs
+- Documented analysis of metric limitations and improvement paths
+
+**Backend & API Design:**
+- FastAPI REST API with Pydantic request/response validation
+- CORS middleware for cross-origin frontend access
+- App lifespan management for startup preloading
+- Automatic Swagger UI documentation generation
+- Structured error handling with HTTP exceptions and logging
+
+**DevOps & Production Engineering:**
+- Docker containerization with multi-service Docker Compose
+- Volume mounts for data and vectorstore persistence
+- GitHub Actions CI/CD pipeline with three sequential jobs
+- Fixture-based testing that avoids external API calls in CI
+- Docker Hub image publishing on every push to main
+- Code quality automation with flake8 linting and black formatting
+
+**Software Engineering:**
+- Modular codebase with clear separation of concerns across backend, frontend, evaluation
+- pytest API testing with six test cases covering both happy paths and validation errors
+- Environment variable management with `.env` and `.env.example`
+- Professional Git workflow with descriptive commit history
+
+---
+
+## Future Improvements
+
+- **Full PDF ingestion** — replace abstract-only indexing with complete paper text using `pypdf` or `arxiv` full-text download; expected to significantly improve context precision and recall scores
+- **Re-ranking** — add a cross-encoder re-ranking step after initial retrieval to improve chunk relevance before passing to the LLM
+- **Hybrid search** — combine semantic vector search with BM25 keyword search for better retrieval on specific technical terms
+- **Streaming responses** — connect the FastAPI streaming support (already implemented in the backend) to the Streamlit UI for word-by-word response rendering
+- **AWS EC2 deployment** — deploy the FastAPI backend to an EC2 instance behind nginx for a fully public production URL
+- **Expanded knowledge base** — add more paper sources (Semantic Scholar, PubMed) and increase topic coverage beyond the current 15 AI/ML domains
+- **User feedback loop** — add thumbs up/down feedback on answers to collect data for evaluating and improving retrieval quality over time
+
+---
+
 ## License
 
 MIT License — see [LICENSE](LICENSE) for details.
@@ -423,6 +523,9 @@ MIT License — see [LICENSE](LICENSE) for details.
 ## Author
 
 **Emad Kalantari**
-Master's in Information and Computer Sciences, University of Luxembourg
 
-[LinkedIn](https://www.linkedin.com/in/emad-kalantari/) · [GitHub](https://github.com/emaadkalantarii) · [Website](https://emadkalantari.com)
+Master's in Information and Computer Sciences — University of Luxembourg
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat&logo=linkedin)](https://linkedin.com/in/emaadkalantarii)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=flat&logo=github)](https://github.com/emaadkalantarii)
+[![Website](https://img.shields.io/badge/Website-Visit-green?style=flat)](https://emadkalantari.com)
